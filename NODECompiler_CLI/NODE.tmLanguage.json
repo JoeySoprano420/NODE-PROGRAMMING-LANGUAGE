@@ -1,0 +1,58 @@
+{
+    "name": "NODE",
+    "scopeName": "source.node",
+    "patterns": [
+        {
+            "match": "\\b(Start|Return|Init|Param|Val|Var|Int)\\b",
+            "name": "keyword.control.node"
+        },
+        {
+            "match": "\\b(if|else|for|while|throw|try|catch|async|await|goto|break|continue|halt)\\b",
+            "name": "keyword.flow.node"
+        },
+        {
+            "match": "\\b(class|struct|enum|namespace|public|private|this)\\b",
+            "name": "storage.type.node"
+        },
+        {
+            "match": "\\b(allocate|free|resize|mutex|lock|unlock|recycle|purge|clear)\\b",
+            "name": "support.function.memory.node"
+        },
+        {
+            "match": "\\b(and|or|xor|not|and_eq|or_eq|xor_eq|not_eq)\\b",
+            "name": "keyword.operator.logical.node"
+        },
+        {
+            "match": "==|=|:|;|<|>|<=|>=|\\+|-|\\*|/|%|\\^|->|<-|~>|<~|<<|>>",
+            "name": "keyword.operator.node"
+        },
+        {
+            "match": "\\b(null|truth|proof|state|verify|accept|deny|fallback|bypass)\\b",
+            "name": "constant.language.node"
+        },
+        {
+            "match": "#.*",
+            "name": "comment.line.number-sign.node"
+        },
+        {
+            "match": "\\*\\*.*?\\*\\*",
+            "name": "comment.block.node"
+        },
+        {
+            "match": "\".*?\"",
+            "name": "string.quoted.double.node"
+        },
+        {
+            "match": "\\b\\d+\\b",
+            "name": "constant.numeric.node"
+        },
+        {
+            "match": "\\|[^\\|]+\\|",
+            "name": "meta.macro.node"
+        }
+    ],
+    "fileTypes": [
+        "node"
+    ],
+    "uuid": "12345678-abcd-1234-abcd-1234567890ab"
+}
