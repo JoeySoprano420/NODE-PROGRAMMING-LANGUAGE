@@ -1,0 +1,9 @@
+| define_behave:subroutine | 
+@A.G.I { 
+    xor_eq(X, Y) : status; 
+    throw if not_eq(X, Y);
+    Return;
+}
+
+xor_eq(A, B) : status;   # Translates to XOR + assignment pattern
+not_eq(A, B) : throw;    # Translates to CMP + JNE
