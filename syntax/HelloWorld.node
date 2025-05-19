@@ -1,0 +1,6 @@
+Start | hello_world |
+
+    Init message == "Hello, World!";
+    print(message);
+
+Return;
