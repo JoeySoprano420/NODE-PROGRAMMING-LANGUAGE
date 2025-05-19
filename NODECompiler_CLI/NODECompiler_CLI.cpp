@@ -1175,7 +1175,47 @@ void parse_node_and_simulate(const std::string& filename) {
             out << "    xor rax, rbx
     mov [status], rax
 ";
-        } else if (line.find("not_eq") != std::string::npos) {
+        } 
+        
+if (line.find("xor_eq") != std::string::npos) {
+    out << "    xor rax, rbx\n";
+    out << "    mov [status], rax\n";
+}
+else if (line.find("simd_xor") != std::string::npos) {
+    out << "    vmovdqa ymm0, [src1]\n";
+    out << "    vmovdqa ymm1, [src2]\n";
+    out << "    vpxor   ymm2, ymm0, ymm1\n";
+    out << "    vmovdqa [dest], ymm2\n";
+}
+else if (line.find("await_loop") != std::string::npos) {
+    out << "    mov rdx, 10\n";  // Simulated await count
+    out << "await_loop:\n";
+    out << "    cmp rdx, 0\n";
+    out << "    jz await_block\n";
+    out << "    dec rdx\n";
+    out << "    jmp await_loop\n";
+    out << "await_block:\n";
+    out << "    nop\n";
+}
+else if (line.find("dispatch_add") != std::string::npos) {
+    out << "    vmovdqa ymm0, [src1]\n";
+    out << "    vmovdqa ymm1, [src2]\n";
+    out << "    vaddps  ymm2, ymm0, ymm1\n";
+    out << "    vmovdqa [dest], ymm2\n";
+}
+else if (line.find("skip_if_verified") != std::string::npos) {
+    out << "    mov rax, [checksum]\n";
+    out << "    cmp rax, [verified_hash]\n";
+    out << "    jne validate_full\n";
+    out << "    jmp skip_proof\n";
+    out << "validate_full:\n";
+    out << "    ; fallback validation logic\n";
+    out << "    nop\n";
+    out << "skip_proof:\n";
+    out << "    ; continue fast path\n";
+}
+          
+        else if (line.find("not_eq") != std::string::npos) {
             out << "    cmp rax, rbx
     jne throw_handler
 ";
@@ -1566,4 +1606,161 @@ int main(int argc, char* argv[]) {
               << " ms\n";
     return 0;
 }
+
+// NODECompiler_CLI.cpp
+// Language: Naturally Optimized Diamond Engineered (NODE)
+// Strategy-Oriented | Subversive Tactical Logic | Generative Unsupervised Learning
+// Virtual Execution | Purely Virtual Language | Parabase Virtual UI
+// Includes: modifiers, selectors, descriptors, durations, keywords, operators, macros, flows, proofs, states, AGIs, etc.
+
+/*
+    INLINE NASM OPTIMIZATION SNIPPETS (To be integrated via AGI)
+
+    ; Loop Variable Scoped Allocation
+    ; --------------------------------
+    ; Allocates loop counter on stack
+    push rcx             ; save global rcx
+    mov rcx, 5           ; scoped loop counter
+.loop_start:
+    ; ... loop body ...
+    dec rcx
+    jnz .loop_start
+    pop rcx              ; restore global rcx
+
+
+    ; Inline IR Evaluation Optimization (Symbolic execution prepass)
+    ; -------------------------------------------------------------
+    ; Resolve immediate expression before branching
+    mov rax, 4
+    cmp rax, 4           ; constant expression
+    je  .fastpass        ; jump resolved pre-eval
+
+
+    ; SIMD Macro Folding (AVX2 example)
+    ; ---------------------------------
+    ; Applies XOR over packed 256-bit lanes
+    vmovdqa ymm0, [src1]     ; load vector
+    vmovdqa ymm1, [src2]
+    vpxor   ymm2, ymm0, ymm1 ; vector XOR
+    vmovdqa [dest], ymm2     ; store result
+*/
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <thread>
+#include <unordered_map>
+#include <chrono>
+#include <vector>
+#include <sstream>
+#include <filesystem>
+
+// 🚀 Memory Optimization: Stack-based task allocation
+struct CompilerTask {
+    std::string filename;
+    CompilerTask(const std::string& file) : filename(file) {}
+};
+
+// 🌐 Caching system & Variable State Store
+std::unordered_map<std::string, std::string> file_cache;
+std::unordered_map<std::string, std::string> variables;
+
+...
+
+// NODECompiler_CLI.cpp
+// Language: Naturally Optimized Diamond Engineered (NODE)
+// Strategy-Oriented | Subversive Tactical Logic | Generative Unsupervised Learning
+// Virtual Execution | Purely Virtual Language | Parabase Virtual UI
+// Includes: modifiers, selectors, descriptors, durations, keywords, operators, macros, flows, proofs, states, AGIs, etc.
+
+/*
+    INLINE NASM OPTIMIZATION SNIPPETS (To be integrated via AGI)
+
+    ; Loop Variable Scoped Allocation
+    push rcx             ; save global rcx
+    mov rcx, 5           ; scoped loop counter
+.loop_start:
+    ; ... loop body ...
+    dec rcx
+    jnz .loop_start
+    pop rcx              ; restore global rcx
+
+    ; Inline IR Evaluation Optimization (Symbolic execution prepass)
+    mov rax, 4
+    cmp rax, 4           ; constant expression
+    je  .fastpass        ; jump resolved pre-eval
+
+    ; SIMD Macro Folding (AVX2 example)
+    vmovdqa ymm0, [src1]     ; load vector
+    vmovdqa ymm1, [src2]
+    vpxor   ymm2, ymm0, ymm1 ; vector XOR
+    vmovdqa [dest], ymm2     ; store result
+
+    ; Loop Unrolling Example (for tight loops)
+    ; Unroll a loop of 4 iterations manually
+    mov rax, [array]
+    add rax, 1
+    add rax, 1
+    add rax, 1
+    add rax, 1
+
+    ; Ultimate Parallelism via Multi-Core Task Dispatch (SIMD + Threads)
+    ; Example using AVX and open thread slots
+    ; (Requires integration with scheduler API)
+    parallel_dispatch:
+        vmovdqa ymm0, [src1]
+        vmovdqa ymm1, [src2]
+        vaddps  ymm2, ymm0, ymm1
+        vmovdqa [dest], ymm2
+        ret
+
+    ; Async Scheduling and Heavy Load Distribution (Massive Await Prioritization)
+    ; -----------------------------------
+    ; Async wait and yield block for time-based quantum
+    schedule:
+        cmp rdx, 0
+        jz await_block
+        dec rdx
+        jmp schedule
+    await_block:
+        nop ; context switch safe zone
+        ret
+
+    ; Zero-Cost Abstractions and Proof-Aware Optimization
+    ; ---------------------------------------------------
+    ; Avoid validation if checksum pre-pass matches
+    mov rax, [checksum]
+    cmp rax, [verified_hash]
+    jne validate_full
+    jmp skip_proof
+
+validate_full:
+    ; fallback verification
+    ; ...
+
+skip_proof:
+    ; continue fast path
+*/
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <thread>
+#include <unordered_map>
+#include <chrono>
+#include <vector>
+#include <sstream>
+#include <filesystem>
+
+// 🚀 Memory Optimization: Stack-based task allocation
+struct CompilerTask {
+    std::string filename;
+    CompilerTask(const std::string& file) : filename(file) {}
+};
+
+// 🌐 Caching system & Variable State Store
+std::unordered_map<std::string, std::string> file_cache;
+std::unordered_map<std::string, std::string> variables;
+
+
 
