@@ -1,0 +1,2 @@
+X = 0          # Mutable assignment
+Y == 1         # Immutable assignment
