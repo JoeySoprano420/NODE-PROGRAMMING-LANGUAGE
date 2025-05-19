@@ -1,0 +1,6 @@
+| define_behave:subroutine | 
+@A.G.I { 
+    xor_eq(X, Y) : status; 
+    throw if not_eq(X, Y);
+    Return;
+}
