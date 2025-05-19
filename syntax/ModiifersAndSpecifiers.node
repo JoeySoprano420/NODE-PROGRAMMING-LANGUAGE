@@ -1,0 +1,9 @@
+| Prefix | Meaning            |
+| ------ | ------------------ |
+| `@`    | Specifier          |
+| `$`    | Modifier           |
+| `!`    | Config directive   |
+| `#`    | Comment            |
+| `**`   | Multi-line comment |
+| `:`    | Fallback           |
+| `;`    | Line end           |
