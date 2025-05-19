@@ -1,0 +1,9 @@
+
+Start | loop_test |
+
+Init X = 3;
+for (Init i = 0; i < X; i = i + 1) {
+    print(X);
+}
+
+Return;
