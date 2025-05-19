@@ -1,0 +1,7 @@
+namespace math {
+    | define_xor |
+    xor_eq(X, Y) : status;
+    Return;
+}
+
+block start [ if < A ] : else -> throw;
