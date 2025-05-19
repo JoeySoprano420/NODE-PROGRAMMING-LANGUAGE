@@ -1,0 +1,12 @@
+Start | main |
+
+    Init X = 5;
+    Init Y == 10;
+
+    if < X {
+        xor_eq(X, Y) : status;
+    } else {
+        throw;
+    }
+
+Return;
