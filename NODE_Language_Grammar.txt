@@ -1,53 +1,65 @@
+🜂 NODE – Naturally Optimized Diamond Engineered
+A Language of Tactical Precision, Symbolic Truth, and Executable Intuition.
+“Written with intent. Executed with certainty. Proven by design.”
+
 NODE LANGUAGE GRAMMAR v1.0 (Human-Readable)
+
 1. Program Structure:
-    program ::= 'Start' identifier? block 'Return' ';'
-    block   ::= statement*
+    program        ::= 'Start' identifier? block 'Return' ';'
+    block          ::= statement*
 
 2. Statements:
-    statement ::= assignment ';' | declaration ';' | conditional | loop |
-                  function_call ';' | control ';' | comment
+    statement      ::= assignment ';'
+                    | declaration ';'
+                    | conditional
+                    | loop
+                    | function_call ';'
+                    | control ';'
+                    | comment
 
 3. Declarations:
-    declaration ::= 'Init' identifier '=' expression |
-                    'Init' identifier '==' expression
+    declaration    ::= 'Init' identifier '=' expression
+                    | 'Init' identifier '==' expression
 
 4. Assignments:
-    assignment ::= identifier '=' expression |
-                   identifier '==' expression
+    assignment     ::= identifier '=' expression
+                    | identifier '==' expression
 
 5. Expressions:
-    expression ::= literal | identifier |
-                   expression operator expression |
-                   function_call
+    expression     ::= literal
+                    | identifier
+                    | expression operator expression
+                    | function_call
 
 6. Operators:
-    operator ::= '+' | '-' | '*' | '/' | '%' | '^' |
-                 '==' | '=' | '<' | '>' | '<=' | '>=' |
-                 'and' | 'or' | 'xor' | 'not' |
-                 'and_eq' | 'or_eq' | 'xor_eq' | 'not_eq' |
-                 '->' | '<-' | '~>' | '<~' | '<<' | '>>'
+    operator       ::= '+' | '-' | '*' | '/' | '%' | '^'
+                    | '==' | '=' | '<' | '>' | '<=' | '>='
+                    | 'and' | 'or' | 'xor' | 'not' 
+                    | 'and_eq' | 'or_eq' | 'xor_eq' | 'not_eq'
+                    | '->' | '<-' | '~>' | '<~' | '<<' | '>>'
 
 7. Conditionals:
-    conditional ::= 'if' expression block ('else' block)?
+    conditional    ::= 'if' expression block ('else' block)?
 
 8. Loops:
-    loop ::= 'for' '(' declaration ';' expression ';' assignment ')' block |
-             'while' expression block
+    loop           ::= 'for' '(' declaration ';' expression ';' assignment ')' block
+                    | 'while' expression block
 
 9. Function Calls:
-    function_call ::= identifier '(' argument_list? ')'
-    argument_list ::= expression (',' expression)*
+    function_call  ::= identifier '(' argument_list? ')'
+    argument_list  ::= expression (',' expression)*
 
 10. Control:
-    control ::= 'throw' | 'break' | 'continue' | 'halt' | 'goto'
+    control        ::= 'throw' | 'break' | 'continue' | 'halt' | 'goto'
 
 11. Comments:
-    comment ::= '#' .* newline | '**' .* '**'
+    comment        ::= '#' .* newline
+                    | '**' .* '**'
 
 12. Literals:
-    literal ::= number | string
-    number ::= [0-9]+
-    string ::= '"' .* '"'
+    literal        ::= number | string
+    number         ::= [0-9]+
+    string         ::= '"' .* '"'
 
 13. Macros:
-    macro ::= '|' identifier '|' block '|'
+    macro          ::= '|' identifier '|' block '|'
