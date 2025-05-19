@@ -1,0 +1,9 @@
+|...| → Abstracted Macro Script (C.I.A.M.S.)
+
+this. → Scope reference inside classes
+
+class, struct, enum → Type declarations
+
+private, public → Access modifiers
+
+: A → Inheritance (class B : A)
