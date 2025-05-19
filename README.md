@@ -115,10 +115,6 @@ JNE throw_handler  ; 0x1E1
 
 ---
 
-Would you like this formalized into:
 
-* A `.spec` document for standard definition?
-* A `.tmLanguage` file for syntax highlighting?
-* A zipped compiler structure (`NODECompiler.exe`, examples, and AOT assembler)?
-* A GitHub-ready deployment with press kit?
+
 
