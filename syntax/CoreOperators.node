@@ -1,0 +1,19 @@
+| Symbol      | Meaning              | Notes                                 |
+| ----------- | -------------------- | ------------------------------------- |
+| `+`         | Addition             | A + B                                 |
+| `-`         | Subtraction          | A - B                                 |
+| `*`         | Multiplication       | A \* B                                |
+| `/`         | Division             | A / B                                 |
+| `%`         | Modulo               | A % B                                 |
+| `^`         | Exponent             | A ^ B                                 |
+| `==`        | Immutable assignment | Value cannot change                   |
+| `=`         | Mutable assignment   | Value may change                      |
+| `:`         | Fallback operator    | Used for error recovery or alternates |
+| `;`         | End of line          |                                       |
+| `[]`        | Buffer/Regulator     | Used for boundary mediation           |
+| `()`        | Texturizer           | UI formatting (optional)              |
+| `<` / `>`   | Less/Greater than    | Comparisons                           |
+| `<<` / `>>` | Rollback / Run       | Context-based flow                    |
+| `<-` / `->` | Throw / Progression  | Exception handling or transitions     |
+| `<~`        | Flag                 | Metadata injection                    |
+| `~>`        | Raise                | Escalate command or scope             |
