@@ -1,0 +1,132 @@
+// NODECompiler.cpp – Full Compiler Core with Diagnostics, One-Click Launchers, and Debug Output
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+#include <sstream>
+#include <stdexcept>
+#include <regex>
+#include <cstdlib> // for system()
+
+// --- NODE Operation Table ---
+struct NODEInstruction {
+    std::string llvmEquivalent;
+    std::string nasmEquivalent;
+};
+
+std::unordered_map<std::string, NODEInstruction> instructionMap = {
+    {"xor_eq",  {"%result = xor i64 %X, %Y", "XOR RAX, RBX"}},
+    {"not_eq",  {"%cmp = icmp ne i64 %X, %Y", "CMP RAX, RBX\nJNE throw_handler"}},
+    {"and_eq",  {"%result = and i64 %X, %Y", "AND RAX, RBX"}},
+    {"or_eq",   {"%result = or i64 %X, %Y", "OR RAX, RBX"}},
+    {"not",     {"%result = xor i64 %X, -1", "NOT RAX"}},
+    {"shiftl",  {"%result = shl i64 %X, %Y", "SHL RAX, CL"}},
+    {"shiftr",  {"%result = lshr i64 %X, %Y", "SHR RAX, CL"}},
+
+    {"new",     {"%ptr = call i8* @malloc(i64 %size)", "CALL malloc"}},
+    {"delete",  {"call void @free(i8* %ptr)", "CALL free"}},
+    {"move",    {"store i64 %X, i64* %Y", "MOV [Y], X"}},
+    {"copy",    {"%X = load i64, i64* %Y", "MOV X, [Y]"}},
+
+    {"if_lt",   {"%cmp = icmp slt i64 %X, %Y", "CMP RAX, RBX\nJL true_label"}},
+    {"if_gt",   {"%cmp = icmp sgt i64 %X, %Y", "CMP RAX, RBX\nJG true_label"}},
+    {"if_eq",   {"%cmp = icmp eq i64 %X, %Y", "CMP RAX, RBX\nJE true_label"}},
+    {"throw",   {"br label %throw_handler", "JMP throw_handler"}},
+
+    {"call",    {"call i64 @func(i64 %X, i64 %Y)", "CALL func"}},
+    {"routine", {"define i64 @func(i64 %X, i64 %Y) { ... }", "func PROC\n...\nRET"}},
+    {"return",  {"ret i64 %X", "MOV RAX, X\nRET"}},
+    {"exit",    {"call void @exit(i32 0)", "MOV RDI, 0\nCALL exit"}},
+
+    {"add",     {"%res = add i64 %X, %Y", "ADD RAX, RBX"}},
+    {"sub",     {"%res = sub i64 %X, %Y", "SUB RAX, RBX"}},
+    {"mul",     {"%res = mul i64 %X, %Y", "IMUL RAX, RBX"}},
+    {"div",     {"%res = sdiv i64 %X, %Y", "IDIV RBX"}},
+    {"mod",     {"%res = srem i64 %X, %Y", "IDIV RBX (RDX = remainder)"}},
+
+    {"push",    {"N/A", "PUSH RAX"}},
+    {"pop",     {"N/A", "POP RAX"}},
+    {"save",    {"N/A", "PUSHAD"}},
+    {"restore", {"N/A", "POPAD"}},
+    {"swap",    {"%tmp = %X; %X = %Y; %Y = %tmp", "XCHG RAX, RBX"}},
+
+    {"start",   {"define i32 @main() {", "main PROC"}},
+    {"label",   {"label: ", "label:"}},
+    {"goto",    {"br label %X", "JMP label"}},
+
+    {"trap",    {"call void @trap()", "INT 3"}},
+    {"panic",   {"call void @puts\ncall exit", "MOV RDI, msg\nCALL puts\nCALL exit"}},
+};
+
+std::string translateLine(const std::string& line, int lineNumber, std::ostream& log) {
+    std::stringstream result;
+    std::string trimmed = std::regex_replace(line, std::regex("#.*"), "");
+    std::istringstream iss(trimmed);
+    std::string token;
+    bool matched = false;
+
+    while (iss >> token) {
+        auto it = instructionMap.find(token);
+        if (it != instructionMap.end()) {
+            result << it->second.nasmEquivalent << "\n";
+            matched = true;
+        }
+    }
+    if (!matched) {
+        log << "[Line " << lineNumber << "] Warning: No recognized NODE operation in: " << line << "\n";
+    }
+    return result.str();
+}
+
+void compileNODEFile(const std::string& filename) {
+    std::ifstream inFile(filename);
+    if (!inFile.is_open()) {
+        std::cerr << "Error: Could not open " << filename << std::endl;
+        return;
+    }
+
+    std::ofstream asmFile("output.asm");
+    std::ofstream logFile("compile.log");
+    asmFile << "section .text\nglobal _start\n_start:\n";
+
+    std::string line;
+    int lineNumber = 0;
+    while (std::getline(inFile, line)) {
+        ++lineNumber;
+        std::string asmCode = translateLine(line, lineNumber, logFile);
+        if (!asmCode.empty()) asmFile << asmCode;
+    }
+
+    asmFile << "\nMOV RAX, 60\nXOR RDI, RDI\nSYSCALL\n";
+    asmFile.close();
+    inFile.close();
+    logFile.close();
+
+    std::cout << "Assembling and linking output.asm...\n";
+    int result = system("nasm -g -f elf64 output.asm -o output.o && ld -g output.o -o output.exe");
+    if (result == 0) {
+        std::cout << "✅ Compilation successful: output.exe generated.\nLogs: compile.log\n";
+    }
+    else {
+        std::cerr << "❌ Compilation failed. Check NASM/LD installation.\n";
+    }
+}
+
+int main(int argc, char* argv[]) {
+    if (argc == 2) {
+        compileNODEFile(argv[1]);
+        return 0;
+    }
+
+    std::string input;
+    std::cout << "NODE Compiler Shell (v1.0)\nType NODE instructions (e.g., xor_eq, add, throw). Ctrl+C to exit.\n\n";
+    while (true) {
+        std::cout << ">> ";
+        std::getline(std::cin, input);
+        if (!input.empty()) std::cout << translateLine(input, 0, std::cout);
+    }
+    return 0;
+}
+
